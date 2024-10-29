@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="atlas_hfdatasets",
-    version="0.1.0",
+    version="1.0.1",
     packages=find_packages(),
     install_requires=[
         "huggingface_hub",
@@ -16,8 +16,13 @@ setup(
     url="https://github.com/yourusername/atlas_hfdatasets",
     classifiers=[
         "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: MIT License",
+        "License :: OSI Approved :: MIT License", 
         "Operating System :: OS Independent",
     ],
     python_requires=">=3.7",
-) 
+    entry_points={
+        'console_scripts': [
+            'atlas_hfdatasets=atlas_hgdatasets.atlas_hgdatasets:main',
+        ],
+    },
+)
