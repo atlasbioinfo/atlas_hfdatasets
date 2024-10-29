@@ -24,27 +24,26 @@ def main():
     parser = argparse.ArgumentParser(description=description_text, formatter_class=argparse.RawTextHelpFormatter)
     subparsers = parser.add_subparsers(dest='command', help='Commands')
 
+    init_parser = subparsers.add_parser('init', help='Initialize and login to Hugging Face Hub')
+
+    list_parser = subparsers.add_parser('list', help='List available datasets on Hugging Face Hub')
+    list_parser.add_argument('-f', type=str, help='Filter datasets by keyword (case-insensitive)', default=None)
+
+    download_parser = subparsers.add_parser('download', help='Download dataset from Hugging Face Hub')
+    download_parser.add_argument('repo_name', type=str, help='Repository name to download (format: username/repo_name)')
+    download_parser.add_argument('-o', type=str, help='Output directory path', default="./")
 
     upload_parser = subparsers.add_parser('upload', help='Upload dataset to Hugging Face Hub')
     upload_parser.add_argument('dataset_path', type=str, help='Path to the local dataset')
     upload_parser.add_argument('-n', type=str, help='Repository name for upload (format: username/repo_name). Default is the dataset folder name', default=None)
     upload_parser.add_argument('-p', type=bool, help='Make dataset public (default: False)', default=False)
     
-    list_parser = subparsers.add_parser('list', help='List available datasets on Hugging Face Hub')
-    list_parser.add_argument('-f', type=str, help='Filter datasets by keyword (case-insensitive)', default=None)
-
     remove_parser = subparsers.add_parser('remove', help='Remove dataset from Hugging Face Hub')
     remove_parser.add_argument('repo_name', type=str, help='Repository name to remove (format: username/repo_name)')
     remove_parser.add_argument('-f', type=bool, help='Force deletion without confirmation', default=False)
     
-    download_parser = subparsers.add_parser('download', help='Download dataset from Hugging Face Hub')
-    download_parser.add_argument('repo_name', type=str, help='Repository name to download (format: username/repo_name)')
-    download_parser.add_argument('-o', type=str, help='Output directory path', default="./")
-
     check_parser = subparsers.add_parser('check', help='Check dataset statistics from Hugging Face Hub')
     check_parser.add_argument('repo_name', type=str, help='Repository name to check (format: username/repo_name)')
-
-    init_parser = subparsers.add_parser('init', help='Initialize and login to Hugging Face Hub')
 
     args = parser.parse_args()
 
