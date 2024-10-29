@@ -1,5 +1,5 @@
 import logging, argparse,os,sys
-from cores.core_functions import login_to_hub, get_username, remove_dataset, list_datasets, upload_dataset, download_dataset
+from cores.core_functions import login_to_hub, get_username, remove_dataset, list_datasets, upload_dataset, download_dataset, check_dataset
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s', datefmt='%H:%M:%S')
 
 def main():
@@ -62,6 +62,8 @@ def main():
                 remove_dataset(args.repo_name, args.f)
             elif args.command == 'download':
                 download_dataset(args.repo_name, args.o)
+            elif args.command == 'check':
+                check_dataset(args.repo_name)
             else:
                 parser.print_help()
         except:

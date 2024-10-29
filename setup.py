@@ -1,5 +1,8 @@
 from setuptools import setup, find_packages
 
+with open("README.md", "r", encoding="utf-8") as fh:
+    long_description = fh.read()
+
 setup(
     name="atlas_hfdatasets",
     version="1.0.1",
@@ -22,7 +25,7 @@ setup(
     python_requires=">=3.7",
     entry_points={
         'console_scripts': [
-            'atlas_hfdatasets=atlas_hgdatasets.atlas_hgdatasets:main',
+            'atlas_hgdatasets=atlas_hgdatasets.atlas_hgdatasets:main',
         ],
     },
 )
