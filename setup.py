@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="atlas_hfdatasets",
-    version="1.2.0",
+    version="1.3.0",
     packages=find_packages(),
     install_requires=[
         "huggingface_hub",
@@ -25,7 +25,7 @@ setup(
     python_requires=">=3.7",
     entry_points={
         'console_scripts': [
-            'atlas_hgdatasets=atlas_hgdatasets.atlas_hgdatasets:main',
+            'atlas_hfdatasets=atlas_hfdatasets.atlas_hfdatasets:main',
         ],
     },
 )
