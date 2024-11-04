@@ -1,5 +1,5 @@
 import logging, argparse,os,sys
-from cores.core_functions import login_to_hub, get_username, remove_dataset, list_datasets, upload_dataset, download_dataset, check_dataset
+from atlas_hfdatasets.src.core_functions import login_to_hub, get_username, remove_dataset, list_datasets, upload_dataset, download_dataset, check_dataset
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s', datefmt='%H:%M:%S')
 
 def main():
