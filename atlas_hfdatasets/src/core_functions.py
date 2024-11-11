@@ -132,27 +132,6 @@ def list_datasets(keyword=None, username=None):
     except Exception as e:
         logging.error(f"Error retrieving datasets: {str(e)}")
 
-def upload_dataset(dataset_path, repo_name=None, public=False):
-    """
-    Upload a local dataset to Hugging Face Dataset Hub
-    
-    Args:
-        dataset_path (str): Path to the local dataset
-    """
-    logging.basicConfig(level=logging.INFO)
-    logging.info("Uploading datasets to Hugging Face Dataset Hub")
-    logging.info(f"Loading dataset from {dataset_path}")
-    
-    from datasets import load_from_disk
-    import os
-    dataset = load_from_disk(dataset_path)
-    
-    if repo_name is None:
-        # Use the dataset folder name as repo name
-        repo_name = os.path.basename(os.path.normpath(dataset_path))
-    
-    dataset.push_to_hub(repo_name, private=not public)
-    logging.info(f"Dataset successfully uploaded to {repo_name} as {'public' if public else 'private'}")
 
 def download_dataset(repo_name, output_dir):
     """
@@ -178,42 +157,6 @@ def download_dataset(repo_name, output_dir):
     except Exception as e:
         logging.error(f"Failed to download dataset: {str(e)}")
         raise
-
-def check_dataset(repo_name):
-    """
-    Check dataset statistics from Hugging Face Hub
-    """
-    from huggingface_hub import HfApi
-    api = HfApi()
-    dataset_info = api.dataset_info(repo_name)
-    print("\n=== Dataset Information ===")
-    print(f"ID: {dataset_info.id}")
-    print(f"Author: {dataset_info.author}")
-    print(f"Created: {dataset_info.created_at}")
-    print(f"Last Modified: {dataset_info.last_modified}")
-    print(f"Private: {dataset_info.private}")
-    print(f"Downloads: {dataset_info.downloads}")
-    print(f"Likes: {dataset_info.likes}")
-    print(f"Tags: {dataset_info.tags}")
-    
-    if dataset_info.card_data and dataset_info.card_data.get('dataset_info'):
-        info = dataset_info.card_data['dataset_info']
-        print("\n=== Dataset Statistics ===")
-        print("Features:")
-        for feature in info['features']:
-            print(f"  - {feature['name']} ({feature['dtype']})")
-        
-        print("\nSplits:")
-        for split in info['splits']:
-            print(f"  - {split['name']}: {split['num_examples']} examples")
-        
-        print(f"\nDownload Size: {info['download_size']} bytes")
-        print(f"Dataset Size: {info['dataset_size']} bytes")
-    
-    print("\n=== Files ===")
-    for sibling in dataset_info.siblings:
-        print(f"  - {sibling.rfilename}")
-    print("=======================\n")
 
 def create_dataset(repo_name: str, public: bool = False) -> None:
     """

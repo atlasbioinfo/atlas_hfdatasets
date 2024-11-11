@@ -1,10 +1,13 @@
 import logging, argparse,os,sys
 
 try:
-    from src.core_functions import login_to_hub, get_username, remove_dataset, list_datasets, upload_dataset, download_dataset, check_dataset, create_dataset
+    from src.core_functions import login_to_hub, get_username, remove_dataset, list_datasets,  download_dataset,  create_dataset
+    from src.upload import upload_dataset
+    from src.check import check_dataset
 except ImportError:
-    from atlas_hfdatasets.src.core_functions import login_to_hub, get_username, remove_dataset, list_datasets, upload_dataset, download_dataset, check_dataset, create_dataset
-
+    from atlas_hfdatasets.src.core_functions import login_to_hub, get_username, remove_dataset, list_datasets,  download_dataset, create_dataset
+    from atlas_hfdatasets.src.upload import upload_dataset
+    from atlas_hfdatasets.src.check import check_dataset
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s', datefmt='%H:%M:%S')
 
 def main():
@@ -43,8 +46,8 @@ def main():
     download_parser.add_argument('-o', type=str, help='Output directory path', default="./")
 
     upload_parser = subparsers.add_parser('upload', help='Upload dataset to Hugging Face Hub')
-    upload_parser.add_argument('dataset_path', type=str, help='Path to the local dataset')
-    upload_parser.add_argument('-n', type=str, help='Repository name for upload (format: username/repo_name). Default is the dataset folder name', default=None)
+    upload_parser.add_argument('dataset_pattern', type=str, help='Dataset pattern to match datasets')
+    upload_parser.add_argument('repo_name', type=str, help='Repository name for upload (format: username/repo_name). Default is the dataset folder name', default=None)
     upload_parser.add_argument('-p', type=bool, help='Make dataset public (default: False)', default=False)
     
     remove_parser = subparsers.add_parser('remove', help='Remove dataset from Hugging Face Hub')
@@ -56,9 +59,8 @@ def main():
 
     args = parser.parse_args()
 
-
     command_handlers = {
-        'upload': lambda: upload_dataset(args.dataset_path, args.n, args.p),
+        'upload': lambda: upload_dataset(args.dataset_pattern, args.repo_name, args.p),
         'list': lambda: list_datasets(args.f, username),
         'remove': lambda: remove_dataset(args.repo_name, args.f),
         'download': lambda: download_dataset(args.repo_name, args.o),
@@ -71,13 +73,13 @@ def main():
     else:
         try:
             username = get_username()
-            if args.command in command_handlers:
-                command_handlers[args.command]()
-            else:
-                parser.print_help()
         except:
             logging.error("Please login first by running 'atlas_hgdatasets init'")
             sys.exit(1)
+        if args.command in command_handlers:
+            command_handlers[args.command]()
+        else:
+            parser.print_help()
 
 if __name__ == "__main__":
     main()

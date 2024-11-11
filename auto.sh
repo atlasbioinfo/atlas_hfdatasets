@@ -1,0 +1,8 @@
+python atlas_hfdatasets/atlas_hfdatasets.py download ATLASBIOINFO/20241029Rice_9311_3UTR_500_TE_DL_raw ;
+python atlas_hfdatasets/atlas_hfdatasets.py download ATLASBIOINFO/20241029Rice_nip_3UTR_500_TE_DL_raw ;
+python atlas_hfdatasets/atlas_hfdatasets.py download ATLASBIOINFO/20241029Rice_9311_3UTR_500_TE_DL_shuffled ;
+python atlas_hfdatasets/atlas_hfdatasets.py download ATLASBIOINFO/20241029Rice_nip_3UTR_500_TE_DL_shuffled ;
+python atlas_hfdatasets/atlas_hfdatasets.py download ATLASBIOINFO/20241101Rice_9311_3UTR_1000_TE_DL_raw ;
+python atlas_hfdatasets/atlas_hfdatasets.py download ATLASBIOINFO/20241101Rice_Nip_3UTR_1000_TE_DL_raw ;
+python atlas_hfdatasets/atlas_hfdatasets.py download ATLASBIOINFO/20241101Rice_9311_3UTR_1000_TE_DL_shuffled ;
+python atlas_hfdatasets/atlas_hfdatasets.py download ATLASBIOINFO/20241101Rice_Nip_3UTR_1000_TE_DL_shuffled ;
