@@ -1,5 +1,5 @@
 import logging, argparse,os,sys
-
+from huggingface_hub import create_repo
 
 def login_to_hub():
     try:
@@ -214,3 +214,22 @@ def check_dataset(repo_name):
     for sibling in dataset_info.siblings:
         print(f"  - {sibling.rfilename}")
     print("=======================\n")
+
+def create_dataset(repo_name: str, public: bool = False) -> None:
+    """
+    Create a new empty dataset repository on Hugging Face Hub.
+    
+    Args:
+        repo_name (str): Name of the repository to create (format: username/repo_name)
+        public (bool): Whether to make the dataset public (default: False)
+    """
+    try:
+        create_repo(
+            repo_id=repo_name,
+            repo_type="dataset",
+            private=not public,
+        )
+        logging.info(f"Successfully created dataset repository: {repo_name}")
+    except Exception as e:
+        logging.error(f"Failed to create dataset repository: {str(e)}")
+        sys.exit(1)

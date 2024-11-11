@@ -1,5 +1,10 @@
 import logging, argparse,os,sys
-from atlas_hfdatasets.src.core_functions import login_to_hub, get_username, remove_dataset, list_datasets, upload_dataset, download_dataset, check_dataset
+
+try:
+    from src.core_functions import login_to_hub, get_username, remove_dataset, list_datasets, upload_dataset, download_dataset, check_dataset, create_dataset
+except ImportError:
+    from atlas_hfdatasets.src.core_functions import login_to_hub, get_username, remove_dataset, list_datasets, upload_dataset, download_dataset, check_dataset, create_dataset
+
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s', datefmt='%H:%M:%S')
 
 def main():
@@ -26,6 +31,10 @@ def main():
 
     init_parser = subparsers.add_parser('init', help='Initialize and login to Hugging Face Hub')
 
+    create_parser = subparsers.add_parser('create', help='Create a new empty dataset repository on Hugging Face Hub')
+    create_parser.add_argument('repo_name', type=str, help='Repository name to create (format: username/repo_name)')
+    create_parser.add_argument('-p', type=bool, help='Make dataset public (default: False)', default=False)
+
     list_parser = subparsers.add_parser('list', help='List available datasets on Hugging Face Hub')
     list_parser.add_argument('-f', type=str, help='Filter datasets by keyword (case-insensitive)', default=None)
 
@@ -48,21 +57,22 @@ def main():
     args = parser.parse_args()
 
 
+    command_handlers = {
+        'upload': lambda: upload_dataset(args.dataset_path, args.n, args.p),
+        'list': lambda: list_datasets(args.f, username),
+        'remove': lambda: remove_dataset(args.repo_name, args.f),
+        'download': lambda: download_dataset(args.repo_name, args.o),
+        'check': lambda: check_dataset(args.repo_name),
+        'create': lambda: create_dataset(args.repo_name, args.p)
+    }
+
     if args.command == 'init':
         login_to_hub()
     else:
         try:
             username = get_username()
-            if args.command == 'upload':
-                upload_dataset(args.dataset_path, args.n, args.p)
-            elif args.command == 'list':
-                list_datasets(args.f, username)
-            elif args.command == 'remove':
-                remove_dataset(args.repo_name, args.f)
-            elif args.command == 'download':
-                download_dataset(args.repo_name, args.o)
-            elif args.command == 'check':
-                check_dataset(args.repo_name)
+            if args.command in command_handlers:
+                command_handlers[args.command]()
             else:
                 parser.print_help()
         except:
