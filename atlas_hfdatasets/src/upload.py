@@ -17,21 +17,21 @@ def find_matching_datasets(dataset_pattern):
     import glob
     
     search_pattern = f"*{dataset_pattern}*"
-    matching_datasets = glob.glob(search_pattern)
+    matching_datasets = [d for d in glob.glob(search_pattern) if os.path.isdir(d)]
     
     if not matching_datasets:
-        logging.error(f"No datasets found matching pattern: {dataset_pattern}")
+        logging.error(f"No dataset folders found matching pattern: {dataset_pattern}")
         logging.info("Current working directory: " + os.getcwd())
-        logging.info("Available files: " + str(os.listdir('.')))
+        logging.info("Available folders: " + str([d for d in os.listdir('.') if os.path.isdir(d)]))
         return None
     
-    print("\nFound matching datasets:")
+    print("\nFound matching dataset folders:")
     print("-" * 60)
     for dataset_path in matching_datasets:
         dataset_name = os.path.basename(os.path.normpath(dataset_path))
         print(f"📁 {dataset_name}")
     print("-" * 60)
-    print(f"\nTotal datasets found: {len(matching_datasets)}")
+    print(f"\nTotal dataset folders found: {len(matching_datasets)}")
     
     return matching_datasets
 

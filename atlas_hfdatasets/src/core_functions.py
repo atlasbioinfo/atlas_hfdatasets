@@ -72,7 +72,14 @@ def remove_dataset(repo_name, force=False):
     """
     
     logging.info(f"Removing dataset {repo_name} from Hugging Face Dataset Hub")
-    
+    try:
+        from huggingface_hub import HfApi
+        api = HfApi()
+        api.repo_info(repo_id=repo_name, repo_type="dataset")
+        logging.info(f"Checked: Dataset repository {repo_name} exists")
+    except Exception as e:
+        logging.error(f"Dataset repository {repo_name} does not exist: {str(e)}")
+        return
     if not force:
         confirm = input(f"Are you sure you want to delete dataset {repo_name}? This cannot be undone. [y/N]: ")
         if confirm.lower() != 'y':
@@ -82,55 +89,6 @@ def remove_dataset(repo_name, force=False):
     from huggingface_hub import delete_repo
     delete_repo(repo_name, repo_type="dataset")
     logging.info(f"Dataset {repo_name} successfully removed")
-
-def list_datasets(keyword=None, username=None):
-    """
-    List datasets available on Hugging Face Hub for a given user
-    
-    Args:
-        keyword (str): Filter datasets by keyword (case-insensitive)
-        username (str): Your Hugging Face username
-    """
-    if username is None:
-        try:
-            username = get_username()
-        except Exception as e:
-            logging.error(f"Error getting username: {str(e)}")
-            logging.error(".")
-            sys.exit(1)
-        
-    from huggingface_hub import HfApi
-    import re
-    api = HfApi()
-    try:
-        logging.info("Retrieving dataset list from Hugging Face Hub...")
-        datasets = api.list_datasets(author=username)
-        if datasets:
-            # Filter datasets by keyword if provided
-            if keyword:
-                pattern = re.compile(keyword, re.IGNORECASE)
-                datasets = [d for d in datasets if pattern.search(d.id)]
-            
-            if datasets:
-                print("\nFound following datasets on Hugging Face Hub:")
-                print("\n{:<40} {:<25} {:<10} {:<30}".format(
-                    "Dataset ID", "Last Modified", "Downloads", "Tags"))
-                print("-" * 105)
-                
-                for dataset in datasets:
-                    tags = ', '.join(dataset.tags) if dataset.tags else ''
-                    print("{:<40} {:<25} {:<10} {:<30}".format(
-                        dataset.id,
-                        dataset.lastModified,
-                        str(dataset.downloads),
-                        tags[:30] + ('...' if len(tags) > 30 else '')
-                    ))
-            else:
-                print(f"\nNo matching datasets found for keyword '{keyword}'")
-        else:
-            print(f"\nNo datasets found for user {username} on Hugging Face Hub")
-    except Exception as e:
-        logging.error(f"Error retrieving datasets: {str(e)}")
 
 
 def download_dataset(repo_name, output_dir):
