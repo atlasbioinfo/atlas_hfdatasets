@@ -91,31 +91,6 @@ def remove_dataset(repo_name, force=False):
     logging.info(f"Dataset {repo_name} successfully removed")
 
 
-def download_dataset(repo_name, output_dir):
-    """
-    Download a dataset from Hugging Face Hub
-    
-    Args:
-        repo_name (str): Repository name in format username/repo_name
-        output_dir (str): Local directory to save the dataset
-    """
-    logging.info(f"Downloading dataset from {repo_name}")
-    try:
-        from datasets import load_dataset
-        dataset = load_dataset(repo_name)
-        
-        # Create output directory if it doesn't exist
-        os.makedirs(output_dir, exist_ok=True)
-        
-        # Save dataset to disk
-        output_path = os.path.join(output_dir, repo_name.split('/')[-1])
-        dataset.save_to_disk(output_path)
-        logging.info(f"Dataset successfully downloaded to {output_path}")
-        
-    except Exception as e:
-        logging.error(f"Failed to download dataset: {str(e)}")
-        raise
-
 def create_dataset(repo_name: str, public: bool = False) -> None:
     """
     Create a new empty dataset repository on Hugging Face Hub.

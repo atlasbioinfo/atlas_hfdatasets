@@ -1,17 +1,20 @@
 import logging, argparse,os,sys
 
 try:
-    from src.core_functions import login_to_hub, get_username, remove_dataset, download_dataset,  create_dataset
+    from src.core_functions import login_to_hub, get_username, remove_dataset, create_dataset
     from src.upload import upload_dataset
     from src.check import check_dataset
     from src.list import list_datasets
     from src.rename import rename_dataset
+    from src.download import download_dataset
 except ImportError:
-    from atlas_hfdatasets.src.core_functions import login_to_hub, get_username, remove_dataset, download_dataset, create_dataset
+    from atlas_hfdatasets.src.core_functions import login_to_hub, get_username, remove_dataset, create_dataset
     from atlas_hfdatasets.src.upload import upload_dataset
     from atlas_hfdatasets.src.check import check_dataset
     from atlas_hfdatasets.src.list import list_datasets
     from atlas_hfdatasets.src.rename import rename_dataset
+    from atlas_hfdatasets.src.download import download_dataset
+
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s', datefmt='%H:%M:%S')
 
 def main():
